@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'add.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -14,7 +15,8 @@ class _HomeState extends State<Home> {
     return new Scaffold(
         body: new PageView(
           children: [
-            new Container(color: Colors.red),
+            new Add(),
+//            new Container(color: Colors.red),
             new Container(color: Colors.blue),
             new Container(color: Colors.grey)
           ],
