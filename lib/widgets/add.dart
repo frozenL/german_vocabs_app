@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'addNoun.dart';
 
 class Add extends StatefulWidget {
   @override
@@ -35,7 +36,7 @@ class _AddState extends State<Add> with SingleTickerProviderStateMixin {
           body: TabBarView(
             controller: _tabController,
             children: [
-              Icon(Icons.directions_car),
+              new AddNoun(),
               Icon(Icons.directions_transit),
             ],
           ),
