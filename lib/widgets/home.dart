@@ -24,11 +24,11 @@ class _HomeState extends State<Home> {
         bottomNavigationBar: new BottomNavigationBar(
           items: [
             new BottomNavigationBarItem(
-                icon: new Icon(Icons.add), title: new Text("trends")),
+                icon: new Icon(Icons.add), title: new Text("Add")),
             new BottomNavigationBarItem(
-                icon: new Icon(Icons.location_on), title: new Text("feed")),
+                icon: new Icon(Icons.edit), title: new Text("Manage")),
             new BottomNavigationBarItem(
-                icon: new Icon(Icons.people), title: new Text("community"))
+                icon: new Icon(Icons.done_all), title: new Text("Test"))
           ],
           onTap: navigationTapped,
           currentIndex: _page,
