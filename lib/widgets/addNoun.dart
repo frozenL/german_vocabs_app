@@ -1,10 +1,8 @@
-import 'dart:async';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 
-import 'package:flutter/foundation.dart';
-import 'package:path_provider/path_provider.dart';
+import '../database/database.dart';
 
 class AddNoun extends StatefulWidget {
   @override
@@ -12,7 +10,33 @@ class AddNoun extends StatefulWidget {
 }
 
 class _AddNounState extends State<AddNoun> {
-  int _counter = 0;
+  String _dbPath;
+  Database _db;
+  final genderController = TextEditingController();
+  final gerController = TextEditingController();
+  final engController = TextEditingController();
+
+  void insertNoun(gender, ger, eng) async {
+    await _db.transaction((txn) async {
+      txn.rawInsert('INSERT INTO Noun (gender, ger, eng) VALUES (?, ?, ?)',
+          ['$gender', '$ger', '$eng']);
+    });
+    List<Map> list = await _db.rawQuery('SELECT * FROM Noun');
+    print(list);
+  }
+
+  void initDb() async {
+    _dbPath = await initDeleteDb('germanApp');
+    _db = await openDatabase(_dbPath);
+    await _db.execute(
+        "CREATE TABLE Noun (id INTEGER PRIMARY KEY, gender TEXT, ger TEXT, eng TEXT)");
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initDb();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,18 +46,21 @@ class _AddNounState extends State<AddNoun> {
         Center(child: Text('gender')),
         Center(
             child: TextField(
+          controller: genderController,
           decoration: InputDecoration(
               border: InputBorder.none, hintText: 'Please enter a gender'),
         )),
         Center(child: Text('term')),
         Center(
             child: TextField(
+              controller: gerController,
           decoration: InputDecoration(
               border: InputBorder.none, hintText: 'Please enter a term'),
         )),
         Center(child: Text('English')),
         Center(
             child: TextField(
+              controller: engController,
           decoration: InputDecoration(
               border: InputBorder.none, hintText: 'Please enter a translation'),
         )),
@@ -50,38 +77,9 @@ class _AddNounState extends State<AddNoun> {
   }
 
   void onPressed() {
-    _counter ++;
-    writeCounter(_counter);
-    readCounter().then((int val) {
-      print(val);
-    });
-  }
-
-  Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
-    return directory.path;
-  }
-
-  Future<File> get _localFile async {
-    final path = await _localPath;
-    return File('$path/counter.txt');
-  }
-
-  Future<File> writeCounter(int counter) async {
-    final file = await _localFile;
-    // Write the file
-    return file.writeAsString('$counter');
-  }
-
-  Future<int> readCounter() async {
-    try {
-      final file = await _localFile;
-      // Read the file
-      String contents = await file.readAsString();
-      return int.parse(contents);
-    } catch (e) {
-      // If we encounter an error, return 0
-      return 0;
-    }
+    insertNoun(genderController.text, gerController.text, engController.text);
+    genderController.clear();
+    gerController.clear();
+    engController.clear();
   }
 }
