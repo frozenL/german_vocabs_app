@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'addNoun.dart';
+import 'addVerb.dart';
 
 class Add extends StatefulWidget {
   @override
@@ -37,7 +38,7 @@ class _AddState extends State<Add> with SingleTickerProviderStateMixin {
             controller: _tabController,
             children: [
               new AddNoun(),
-              Icon(Icons.directions_transit),
+              new AddVerb(),
             ],
           ),
       );
